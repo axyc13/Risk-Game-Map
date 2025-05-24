@@ -27,24 +27,32 @@ public class MapEngine {
 
     this.countryStats = Utils.readCountries();
     this.adjacencies = Utils.readAdjacencies();
-    for (String country : this.countryStats) {
-      this.countryNames.add(country.split(",")[0].trim());
+    CountryMaker country = new CountryMaker(this.countryStats, this.adjacencies);
+    this.countryNames = country.getCountryNames();
+  }
+
+  public void checkInput(String inputCountry) throws InvalidCountryException {
+    if (!countryNames.contains(Utils.capitalizeFirstLetterOfEachWord(inputCountry))) {
+      throw new InvalidCountryException();
+    } else {
+      isInvalidCountry = false;
     }
-    Country country = new Country(this.countryStats, this.adjacencies);
-    System.out.println(country.getAdjacencies(this.adjacencies));
   }
 
   /** this method is invoked when the user run the command info-country. */
   public void showInfoCountry() {
     MapEngine map = new MapEngine();
-    // while (isInvalidCountry) {
-    //   MessageCli.INSERT_COUNTRY.printMessage();
-    //   String inputCountry = Utils.scanner.nextLine().trim();
-    //   if (countryNames.contains(Utils.capitalizeFirstLetterOfEachWord(inputCountry))) {
-    //     isInvalidCountry = false;
-
-    //   }
-    // }
+    while (isInvalidCountry) {
+      MessageCli.INSERT_COUNTRY.printMessage();
+      String inputCountry = Utils.scanner.nextLine().trim();
+      try {
+        checkInput(inputCountry);
+        MessageCli.COUNTRY_INFO.printMessage(Utils.capitalizeFirstLetterOfEachWord(inputCountry));
+      } catch (InvalidCountryException e) {
+        MessageCli.INVALID_COUNTRY.printMessage(
+            Utils.capitalizeFirstLetterOfEachWord(inputCountry));
+      }
+    }
   }
 
   /** this method is invoked when the user run the command route. */
