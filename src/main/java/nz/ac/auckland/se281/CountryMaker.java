@@ -7,7 +7,9 @@ public class CountryMaker {
   private List<String> countryStats;
   private List<String> adjacencies;
   private List<String> countryNames = new ArrayList<>();
-  private List<String> adjacenciesWithoutSelf = new ArrayList<>();
+  private List<List<String>> adjacenciesWithoutSelf = new ArrayList<>();
+  private List<String> continents = new ArrayList<>();
+  private List<String> fuels = new ArrayList<>();
 
   public CountryMaker(List<String> countryStats, List<String> adjacencies) {
     this.countryStats = countryStats;
@@ -21,18 +23,32 @@ public class CountryMaker {
     return this.countryNames;
   }
 
-  public List<String> getAdjacencies() {
+  public List<String> getContinent() {
+    for (String country : this.countryStats) {
+      String[] parts = country.split(",");
+      this.continents.add(parts[1].trim());
+    }
+    return this.continents;
+  }
+
+  public List<String> getFuel() {
+    for (String country : this.countryStats) {
+      String[] parts = country.split(",");
+      this.fuels.add(parts[2].trim());
+    }
+    return this.fuels;
+  }
+
+  public List<List<String>> getAdjacenciesWithoutSelf() {
+    List<String> test = new ArrayList<>();
     for (String adjacency : this.adjacencies) {
       String[] parts = adjacency.split(",");
 
-      StringBuilder sb = new StringBuilder();
       for (int i = 1; i < parts.length; i++) {
-        sb.append(parts[i].trim());
-        if (i != parts.length - 1) {
-          sb.append(", ");
-        }
+        test.add(parts[i].trim());
       }
-      this.adjacenciesWithoutSelf.add(sb.toString());
+      this.adjacenciesWithoutSelf.add(test);
+      test = new ArrayList<>();
     }
     return this.adjacenciesWithoutSelf;
   }
