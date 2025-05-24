@@ -15,6 +15,7 @@ public class MapEngine {
   private List<String> countryStats;
   private List<String> adjacencies;
   private List<String> countryNames = new ArrayList<>();
+  private List<String> continents = new ArrayList<>();
   private boolean isInvalidCountry = true;
 
   public MapEngine() {
@@ -27,20 +28,23 @@ public class MapEngine {
     this.countryStats = Utils.readCountries();
     this.adjacencies = Utils.readAdjacencies();
     for (String country : this.countryStats) {
-      countryNames.add(country.split(",")[0].trim());
+      this.countryNames.add(country.split(",")[0].trim());
     }
+    Country country = new Country(this.countryStats, this.adjacencies);
+    System.out.println(country.getAdjacencies(this.adjacencies));
   }
 
   /** this method is invoked when the user run the command info-country. */
   public void showInfoCountry() {
     MapEngine map = new MapEngine();
-    while (isInvalidCountry) {
-      MessageCli.INSERT_COUNTRY.printMessage();
-      String inputCountry = Utils.scanner.nextLine().trim();
-      if (countryNames.contains(Utils.capitalizeFirstLetterOfEachWord(inputCountry))) {
-        isInvalidCountry = false;
-      }
-    }
+    // while (isInvalidCountry) {
+    //   MessageCli.INSERT_COUNTRY.printMessage();
+    //   String inputCountry = Utils.scanner.nextLine().trim();
+    //   if (countryNames.contains(Utils.capitalizeFirstLetterOfEachWord(inputCountry))) {
+    //     isInvalidCountry = false;
+
+    //   }
+    // }
   }
 
   /** this method is invoked when the user run the command route. */
