@@ -1,11 +1,7 @@
 package nz.ac.auckland.se281;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 // HashSet or LinkedHashSet (Set<__> var = new HashSet<>() OR new LinkedHashSet<>();) DO IT FOR
 // CONTINENTS TRAVELLED
@@ -135,13 +131,15 @@ public class MapEngine {
     }
     MessageCli.FUEL_INFO.printMessage(fuelCost + "");
 
-    Set<String> continentsTravelledIntermediate = new HashSet<>();
+    List<String> continentsTravelled = new ArrayList<>();
     for (int i = 0; i < totalRoute.size(); i++) {
       int index = countryNames.indexOf(totalRoute.get(i));
-      continentsTravelledIntermediate.add(this.continents.get(index));
+      if (!continentsTravelled.contains(this.continents.get(index))) {
+        continentsTravelled.add(this.continents.get(index));
+      }
     }
-    List<String> continentsTravelled = new ArrayList<>(continentsTravelledIntermediate);
-    Map<String, Integer> continentFuelCount = new HashMap<>();
+
+    List<Integer> continentFuelCount = new ArrayList<>();
     int fuelPerContinent = 0;
     for (String continent : continentsTravelled) {
       for (int i = 0; i < totalRoute.size(); i++) {
@@ -153,9 +151,26 @@ public class MapEngine {
           }
         }
       }
-      continentFuelCount.put(continent, fuelPerContinent);
+      continentFuelCount.add(fuelPerContinent);
       fuelPerContinent = 0;
     }
-    System.out.println(continentFuelCount);
+    String test = "[";
+
+    for (int i = 0; i < continentsTravelled.size(); i++) {
+      String continent = continentsTravelled.get(i);
+      int fuel = continentFuelCount.get(i);
+      test += continent + " (" + fuel + "), ";
+    }
+    test = test.substring(0, test.length() - 2) + "]";
+    MessageCli.CONTINENT_INFO.printMessage(test);
+
+    int mostFuel = continentFuelCount.get(0);
+    for (int i = 0; i < continentFuelCount.size(); i++) {
+      if (continentFuelCount.get(i) > mostFuel) {
+        mostFuel = continentFuelCount.get(i);
+      }
+    }
+    String continentWithMostFuel = continentsTravelled.get(continentFuelCount.indexOf(mostFuel));
+    MessageCli.FUEL_CONTINENT_INFO.printMessage(continentWithMostFuel + " (" + mostFuel + ")");
   }
 }
