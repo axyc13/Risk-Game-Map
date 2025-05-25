@@ -17,6 +17,7 @@ public class CountryMaker {
   }
 
   public List<String> getCountryNames() {
+    // Extract country names
     for (String country : this.countryStats) {
       this.countryNames.add(country.split(",")[0].trim());
     }
@@ -24,6 +25,7 @@ public class CountryMaker {
   }
 
   public List<String> getContinent() {
+    // Extract continents
     for (String country : this.countryStats) {
       String[] parts = country.split(",");
       this.continents.add(parts[1].trim());
@@ -32,6 +34,7 @@ public class CountryMaker {
   }
 
   public List<String> getFuel() {
+    // Extract fuel costs
     for (String country : this.countryStats) {
       String[] parts = country.split(",");
       this.fuels.add(parts[2].trim());
@@ -40,6 +43,7 @@ public class CountryMaker {
   }
 
   public List<List<String>> getAdjacenciesWithoutSelf() {
+    // Extract the countries adjacencies without itself
     List<String> test = new ArrayList<>();
     for (String adjacency : this.adjacencies) {
       String[] parts = adjacency.split(",");

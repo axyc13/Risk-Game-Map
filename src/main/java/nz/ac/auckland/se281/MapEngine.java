@@ -3,13 +3,6 @@ package nz.ac.auckland.se281;
 import java.util.ArrayList;
 import java.util.List;
 
-// HashSet or LinkedHashSet (Set<__> var = new HashSet<>() OR new LinkedHashSet<>();) DO IT FOR
-// CONTINENTS TRAVELLED
-// LinkedList with the Queue (Queue<__> var = new LinkedList<>();) DONE
-// LinkedList/ArrayList with the List DONE
-// Throw and catch custom exception DONE
-// At least two new classes. DONE
-
 /** This class is the main entry point. */
 public class MapEngine {
 
@@ -31,7 +24,7 @@ public class MapEngine {
 
   /** invoked one time only when constracting the MapEngine class. */
   private void loadMap() {
-
+    // Initialise variables
     this.countryStats = Utils.readCountries();
     this.adjacencies = Utils.readAdjacencies();
     CountryMaker country = new CountryMaker(this.countryStats, this.adjacencies);
@@ -41,6 +34,7 @@ public class MapEngine {
     this.adjacenciesWithoutSelf = country.getAdjacenciesWithoutSelf();
   }
 
+  /** this method is invoked when checking for an exception */
   public void checkInput(String inputCountry) throws InvalidCountryException {
     if (!countryNames.contains(inputCountry)) {
       throw new InvalidCountryException();
@@ -52,13 +46,16 @@ public class MapEngine {
     loadMap();
     this.isInvalidCountry = true;
 
+    // Loop until valid user input
     while (this.isInvalidCountry) {
       MessageCli.INSERT_COUNTRY.printMessage();
       String inputCountry = Utils.scanner.nextLine().trim();
       inputCountry = Utils.capitalizeFirstLetterOfEachWord(inputCountry);
       try {
         checkInput(inputCountry);
+
         this.isInvalidCountry = false;
+        // Print country information
         int index = countryNames.indexOf(inputCountry);
         MessageCli.COUNTRY_INFO.printMessage(
             inputCountry,
@@ -76,22 +73,24 @@ public class MapEngine {
     loadMap();
     this.isInvalidStartingCountry = true;
     this.isInvalidEndingCountry = true;
+
+    // Loop until valid user input for starting and ending country
     while (isInvalidStartingCountry) {
       MessageCli.INSERT_SOURCE.printMessage();
       this.startingCountry = Utils.scanner.nextLine().trim();
       this.startingCountry = Utils.capitalizeFirstLetterOfEachWord(this.startingCountry);
       try {
         checkInput(this.startingCountry);
+
         this.isInvalidStartingCountry = false;
-        System.out.println("You selected: " + startingCountry);
         while (isInvalidEndingCountry) {
           MessageCli.INSERT_DESTINATION.printMessage();
           this.endingCountry = Utils.scanner.nextLine().trim();
           this.endingCountry = Utils.capitalizeFirstLetterOfEachWord(this.endingCountry);
           try {
             checkInput(this.endingCountry);
+
             this.isInvalidEndingCountry = false;
-            System.out.println("You selected: " + endingCountry);
           } catch (InvalidCountryException e) {
             MessageCli.INVALID_COUNTRY.printMessage(this.endingCountry);
           }
@@ -100,12 +99,14 @@ public class MapEngine {
         MessageCli.INVALID_COUNTRY.printMessage(this.startingCountry);
       }
     }
-    // Checks if same starting and ending country
+
+    // Checks if we have the same starting and ending country
     if (this.startingCountry.equals(this.endingCountry)) {
       MessageCli.NO_CROSSBORDER_TRAVEL.printMessage();
       return;
     }
-    // Checks if direct neighbours
+
+    // Checks if they are direct neighbours
     int indexofStarting = countryNames.indexOf(startingCountry);
     int indexofEnding = countryNames.indexOf(endingCountry);
     if (this.adjacenciesWithoutSelf.get(indexofStarting).contains(endingCountry)) {
@@ -120,10 +121,13 @@ public class MapEngine {
       return;
     }
 
+    // If not, we create a graph and find the optimal route
     Graph graph = new Graph(countryNames, adjacenciesWithoutSelf);
+
     List<String> totalRoute = graph.breathFirstTraversal(startingCountry, endingCountry);
     MessageCli.ROUTE_INFO.printMessage(totalRoute.toString());
 
+    // Find total fuel cost
     int fuelCost = 0;
     for (int i = 1; i < totalRoute.size() - 1; i++) {
       int index = countryNames.indexOf(totalRoute.get(i));
@@ -131,6 +135,7 @@ public class MapEngine {
     }
     MessageCli.FUEL_INFO.printMessage(fuelCost + "");
 
+    // Find continents travelled
     List<String> continentsTravelled = new ArrayList<>();
     for (int i = 0; i < totalRoute.size(); i++) {
       int index = countryNames.indexOf(totalRoute.get(i));
@@ -139,6 +144,7 @@ public class MapEngine {
       }
     }
 
+    // Find fuel cost per continent
     List<Integer> continentFuelCount = new ArrayList<>();
     int fuelPerContinent = 0;
     for (String continent : continentsTravelled) {
@@ -154,8 +160,9 @@ public class MapEngine {
       continentFuelCount.add(fuelPerContinent);
       fuelPerContinent = 0;
     }
-    String test = "[";
 
+    // Print continents travelled and fuel cost per continent
+    String test = "[";
     for (int i = 0; i < continentsTravelled.size(); i++) {
       String continent = continentsTravelled.get(i);
       int fuel = continentFuelCount.get(i);
@@ -164,6 +171,7 @@ public class MapEngine {
     test = test.substring(0, test.length() - 2) + "]";
     MessageCli.CONTINENT_INFO.printMessage(test);
 
+    // Find continent with most fuel cost
     int mostFuel = continentFuelCount.get(0);
     for (int i = 0; i < continentFuelCount.size(); i++) {
       if (continentFuelCount.get(i) > mostFuel) {

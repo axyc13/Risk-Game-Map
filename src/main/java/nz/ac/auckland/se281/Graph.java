@@ -13,7 +13,7 @@ public class Graph {
 
   public Graph(List<String> countries, List<List<String>> neighbors) {
     adjNodes = new HashMap<>();
-
+    // Initialise Graph
     for (int i = 0; i < countries.size(); i++) {
       String country = countries.get(i);
       List<String> neighborList = neighbors.get(i);
@@ -22,6 +22,7 @@ public class Graph {
   }
 
   public List<String> breathFirstTraversal(String root, String end) {
+    // Perform BFS to find the optimal path from root to target end country
     Set<String> visited = new HashSet<>();
     Queue<String> queue = new LinkedList<>();
     Map<String, String> travelMap = new HashMap<>();
@@ -34,6 +35,7 @@ public class Graph {
     while (!queue.isEmpty()) {
       String currentNode = queue.poll();
 
+      // If we reach the target country, backtrack to find the optimal path
       if (currentNode.equals(end)) {
         while (currentNode != null) {
           optimalPath.add(0, currentNode);
@@ -41,7 +43,7 @@ public class Graph {
         }
         return optimalPath;
       }
-
+      // Travel through adjacent nodes until we reach the target
       for (String n : adjNodes.get(currentNode)) {
         if (!visited.contains(n)) {
           visited.add(n);
@@ -51,6 +53,6 @@ public class Graph {
       }
     }
 
-    return optimalPath;
+    return optimalPath; // This will be empty if no path is found
   }
 }
