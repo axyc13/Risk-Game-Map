@@ -3,8 +3,9 @@ package nz.ac.auckland.se281;
 import java.util.ArrayList;
 import java.util.List;
 
-// HashSet or LinkedHashSet (Set<__> var = new HashSet<>() OR new LinkedHashSet<>();)
-// LinkedList with the Queue (Queue<__> var = new LinkedList<>();)
+// HashSet or LinkedHashSet (Set<__> var = new HashSet<>() OR new LinkedHashSet<>();) DO IT FOR
+// CONTINENTS TRAVELLED
+// LinkedList with the Queue (Queue<__> var = new LinkedList<>();) DONE
 // LinkedList/ArrayList with the List DONE
 // Throw and catch custom exception DONE
 // At least two new classes. DONE
@@ -116,8 +117,17 @@ public class MapEngine {
               + " (0), "
               + this.continents.get(indexofEnding)
               + " (0)]");
+      return;
     }
+
     Graph graph = new Graph(countryNames, adjacenciesWithoutSelf);
-    System.out.print(graph.breathFirstTraversal(startingCountry, endingCountry));
+    List<String> totalRoute = graph.breathFirstTraversal(startingCountry, endingCountry);
+    MessageCli.ROUTE_INFO.printMessage(totalRoute.toString());
+    int fuelCost = 0;
+    for (int i = 1; i < totalRoute.size() - 1; i++) {
+      int index = countryNames.indexOf(totalRoute.get(i));
+      fuelCost += Integer.valueOf(fuels.get(index));
+    }
+    MessageCli.FUEL_INFO.printMessage(fuelCost + "");
   }
 }
