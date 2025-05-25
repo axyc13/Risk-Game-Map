@@ -21,7 +21,7 @@ public class Graph {
     }
   }
 
-  public List<String> breathFirstTraversal(String root, String end) {
+  public List<String> findOptimalPath(String root, String end) {
     // Perform BFS to find the optimal path from root to target end country
     Set<String> visited = new HashSet<>();
     Queue<String> queue = new LinkedList<>();
@@ -32,6 +32,7 @@ public class Graph {
     visited.add(root);
     travelMap.put(root, null);
 
+    // BFS
     while (!queue.isEmpty()) {
       String currentNode = queue.poll();
 

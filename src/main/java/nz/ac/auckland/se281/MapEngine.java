@@ -34,7 +34,7 @@ public class MapEngine {
     this.adjacenciesWithoutSelf = country.getAdjacenciesWithoutSelf();
   }
 
-  /** this method is invoked when checking for an exception */
+  /** this method is invoked when checking for an exception. */
   public void checkInput(String inputCountry) throws InvalidCountryException {
     if (!countryNames.contains(inputCountry)) {
       throw new InvalidCountryException();
@@ -124,7 +124,7 @@ public class MapEngine {
     // If not, we create a graph and find the optimal route
     Graph graph = new Graph(countryNames, adjacenciesWithoutSelf);
 
-    List<String> totalRoute = graph.breathFirstTraversal(startingCountry, endingCountry);
+    List<String> totalRoute = graph.findOptimalPath(startingCountry, endingCountry);
     MessageCli.ROUTE_INFO.printMessage(totalRoute.toString());
 
     // Find total fuel cost
@@ -161,15 +161,16 @@ public class MapEngine {
       fuelPerContinent = 0;
     }
 
-    // Print continents travelled and fuel cost per continent
-    String test = "[";
+    // Print continent information
+    StringBuilder sb = new StringBuilder("[");
     for (int i = 0; i < continentsTravelled.size(); i++) {
       String continent = continentsTravelled.get(i);
       int fuel = continentFuelCount.get(i);
-      test += continent + " (" + fuel + "), ";
+      sb.append(continent).append(" (").append(fuel).append("), ");
     }
-    test = test.substring(0, test.length() - 2) + "]";
-    MessageCli.CONTINENT_INFO.printMessage(test);
+    sb.setLength(sb.length() - 2);
+    sb.append("]");
+    MessageCli.CONTINENT_INFO.printMessage(sb.toString());
 
     // Find continent with most fuel cost
     int mostFuel = continentFuelCount.get(0);
