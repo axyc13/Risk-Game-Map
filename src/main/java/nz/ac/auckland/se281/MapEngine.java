@@ -1,8 +1,10 @@
 package nz.ac.auckland.se281;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 // HashSet or LinkedHashSet (Set<__> var = new HashSet<>() OR new LinkedHashSet<>();) DO IT FOR
@@ -125,6 +127,7 @@ public class MapEngine {
     Graph graph = new Graph(countryNames, adjacenciesWithoutSelf);
     List<String> totalRoute = graph.breathFirstTraversal(startingCountry, endingCountry);
     MessageCli.ROUTE_INFO.printMessage(totalRoute.toString());
+
     int fuelCost = 0;
     for (int i = 1; i < totalRoute.size() - 1; i++) {
       int index = countryNames.indexOf(totalRoute.get(i));
@@ -132,11 +135,27 @@ public class MapEngine {
     }
     MessageCli.FUEL_INFO.printMessage(fuelCost + "");
 
-    Set<String> continentsTravelled = new HashSet<>();
+    Set<String> continentsTravelledIntermediate = new HashSet<>();
     for (int i = 0; i < totalRoute.size(); i++) {
       int index = countryNames.indexOf(totalRoute.get(i));
-      continentsTravelled.add(this.continents.get(index));
+      continentsTravelledIntermediate.add(this.continents.get(index));
     }
-    System.out.print(continentsTravelled);
+    List<String> continentsTravelled = new ArrayList<>(continentsTravelledIntermediate);
+    Map<String, Integer> continentFuelCount = new HashMap<>();
+    int fuelPerContinent = 0;
+    for (String continent : continentsTravelled) {
+      for (int i = 0; i < totalRoute.size(); i++) {
+        int index = countryNames.indexOf(totalRoute.get(i));
+        if (this.continents.get(index).equals(continent)) {
+          fuelPerContinent += Integer.valueOf(this.fuels.get(index));
+          if (i == 0 || i == totalRoute.size() - 1) {
+            fuelPerContinent -= Integer.valueOf(this.fuels.get(index));
+          }
+        }
+      }
+      continentFuelCount.put(continent, fuelPerContinent);
+      fuelPerContinent = 0;
+    }
+    System.out.println(continentFuelCount);
   }
 }
