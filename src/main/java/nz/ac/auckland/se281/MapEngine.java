@@ -1,7 +1,9 @@
 package nz.ac.auckland.se281;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 // HashSet or LinkedHashSet (Set<__> var = new HashSet<>() OR new LinkedHashSet<>();) DO IT FOR
 // CONTINENTS TRAVELLED
@@ -126,8 +128,15 @@ public class MapEngine {
     int fuelCost = 0;
     for (int i = 1; i < totalRoute.size() - 1; i++) {
       int index = countryNames.indexOf(totalRoute.get(i));
-      fuelCost += Integer.valueOf(fuels.get(index));
+      fuelCost += Integer.valueOf(this.fuels.get(index));
     }
     MessageCli.FUEL_INFO.printMessage(fuelCost + "");
+
+    Set<String> continentsTravelled = new HashSet<>();
+    for (int i = 0; i < totalRoute.size(); i++) {
+      int index = countryNames.indexOf(totalRoute.get(i));
+      continentsTravelled.add(this.continents.get(index));
+    }
+    System.out.print(continentsTravelled);
   }
 }
