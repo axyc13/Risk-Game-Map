@@ -106,21 +106,6 @@ public class MapEngine {
       return;
     }
 
-    // Checks if they are direct neighbours
-    // int indexofStarting = countryNames.indexOf(startingCountry);
-    // int indexofEnding = countryNames.indexOf(endingCountry);
-    // if (this.adjacenciesWithoutSelf.get(indexofStarting).contains(endingCountry)) {
-    //   MessageCli.ROUTE_INFO.printMessage("[" + startingCountry + ", " + endingCountry + "]");
-    //   MessageCli.FUEL_INFO.printMessage("0");
-    //   MessageCli.CONTINENT_INFO.printMessage(
-    //       "["
-    //           + this.continents.get(indexofStarting)
-    //           + " (0), "
-    //           + this.continents.get(indexofEnding)
-    //           + " (0)]");
-    //   return;
-    // }
-
     // If not, we create a graph and find the optimal route
     Graph graph = new Graph(countryNames, adjacenciesWithoutSelf);
 
