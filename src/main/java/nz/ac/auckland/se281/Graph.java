@@ -29,11 +29,11 @@ public class Graph {
   }
 
   /**
-   * This method finds the optimal path from the root country to the target end country using BFS
+   * This method finds the optimal path from the root country to the target end country using BFS.
    *
-   * @param root
-   * @param end
-   * @return
+   * @param root the starting country from which the search begins.
+   * @param end the target country to which we want to find the optimal path.
+   * @return a list of country names for the optimal path, or an empty list if no path found.
    */
   public List<String> findOptimalPath(String root, String end) {
     // Perform BFS to find the optimal path from root to target end country
