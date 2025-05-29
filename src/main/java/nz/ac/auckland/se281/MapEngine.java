@@ -18,6 +18,7 @@ public class MapEngine {
   private String startingCountry;
   private String endingCountry;
 
+  /** Constructor for the MapEngine class that loads the map. */
   public MapEngine() {
     loadMap();
   }
@@ -34,7 +35,12 @@ public class MapEngine {
     this.adjacenciesWithoutSelf = country.getAdjacenciesWithoutSelf();
   }
 
-  /** this method is invoked when checking for an exception. */
+  /**
+   * The method checks if the input country is valid.
+   *
+   * @param inputCountry the name of the country to check.
+   * @throws InvalidCountryException if the input country is not in the list of valid countries.
+   */
   public void checkInput(String inputCountry) throws InvalidCountryException {
     if (!countryNames.contains(inputCountry)) {
       throw new InvalidCountryException();

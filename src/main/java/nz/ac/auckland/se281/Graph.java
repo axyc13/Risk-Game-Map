@@ -11,6 +11,13 @@ import java.util.Set;
 public class Graph {
   private Map<String, List<String>> adjNodes;
 
+  /**
+   * Constructor for the Graph class.
+   *
+   * @param countries List of country names.
+   * @param neighbors List of lists where each sublist contains the names of neighboring countries
+   *     for the corresponding country in the countries list.
+   */
   public Graph(List<String> countries, List<List<String>> neighbors) {
     adjNodes = new HashMap<>();
     // Initialise Graph
@@ -21,6 +28,13 @@ public class Graph {
     }
   }
 
+  /**
+   * This method finds the optimal path from the root country to the target end country using BFS
+   *
+   * @param root
+   * @param end
+   * @return
+   */
   public List<String> findOptimalPath(String root, String end) {
     // Perform BFS to find the optimal path from root to target end country
     Set<String> visited = new HashSet<>();
